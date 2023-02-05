@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { RepoListHeader } from './ReposListHeader';
 import { Buttons } from './Buttons';
 
@@ -10,6 +11,7 @@ const sortReposInDescendingOrder = (repos: any) =>
 export function RepoList() {
   const [repos, setRepos] = useState([]);
   const [filteredRepos, setFilteredRepos] = useState(repos);
+  const navigate = useNavigate();
 
   const getRepos = async () => {
     const response = await fetch('http://localhost:4000/repos');
@@ -21,6 +23,14 @@ export function RepoList() {
   useEffect(() => {
     getRepos();
   }, []);
+
+  const goToRouteDetails = (
+    id: string,
+    commitsUrl: string,
+    fullName: string
+  ) => {
+    navigate(`repo-details/${id}`, { state: { commitsUrl, fullName } });
+  };
 
   return (
     filteredRepos && (
@@ -36,8 +46,14 @@ export function RepoList() {
                 description,
                 language,
                 forks_count: forksCount,
+                commits_url: commitsUrl,
+                full_name: fullName,
               }: any) => (
-                <tr key={id}>
+                <tr
+                  key={id}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => goToRouteDetails(id, commitsUrl, fullName)}
+                >
                   <td>{name}</td>
                   <td>{description}</td>
                   <td>{language}</td>

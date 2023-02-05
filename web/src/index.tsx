@@ -2,12 +2,25 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { RepoList } from './components/RepoList';
 import { reportWebVitals } from './reportWebVitals';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { RepoDetails } from './components/RepoDetails';
 
 import './index.css';
 
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <RepoList />,
+  },
+  {
+    path: 'repo-details/:repoId',
+    element: <RepoDetails />,
+  },
+]);
+
 ReactDOM.render(
   <React.StrictMode>
-    <RepoList />
+    <RouterProvider router={router} />
   </React.StrictMode>,
   document.getElementById('root')
 );
