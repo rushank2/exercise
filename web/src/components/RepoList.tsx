@@ -1,13 +1,19 @@
 import { useState, useEffect } from 'react';
 import { RepoListHeader } from './ReposListHeader';
 
+const sortReposInDescendingOrder = (repos: any) =>
+  repos.sort((a: any, b: any) => {
+    return new Date(b.created_at).valueOf() - new Date(a.created_at).valueOf();
+  });
+
 export function RepoList() {
   const [repos, setRepos] = useState([]);
 
   const getRepos = async () => {
     const response = await fetch('http://localhost:4000/repos');
     const jsonData = await response.json();
-    setRepos(jsonData);
+    const sortedData = sortReposInDescendingOrder(jsonData);
+    setRepos(sortedData);
   };
 
   useEffect(() => {
